@@ -1,10 +1,15 @@
-# Deploy to organiccryptoyyc.com (Hetzner)
+# Deploy to onboard.organiccryptoyyc.com (Hetzner)
 
 Public addresses:
 
-- Web app: `https://organiccryptoyyc.com/onboard/`
-- Start page (QR on cue card 1): `https://organiccryptoyyc.com/onboard/#start`
-- API (same origin, for the web app and health checks): `https://organiccryptoyyc.com/onboard/api/v1/health`
+- Web app: `https://onboard.organiccryptoyyc.com/`
+- Start page (QR on cue card 1): `https://onboard.organiccryptoyyc.com/#start`
+- API (same origin, for the web app and health checks): `https://onboard.organiccryptoyyc.com/api/v1/health`
+
+DNS: Cloudflare A record `onboard` → `135.181.248.55`, DNS only.
+The server's Caddy runs in Docker (managed by PSM), so use `deploy/onboard.caddy`
+as its own site file and bind the API to the Docker host address (`HOST=172.18.0.1`).
+`nginx-onboard.conf` and `Caddyfile.onboard` are path-based alternatives (`/onboard/`).
 
 The web app finds the API at `./api/` by itself, so `web/config.js` needs no edit.
 
@@ -23,8 +28,8 @@ sudo mkdir -p /var/www/pokt-onboard && sudo rsync -a --delete /opt/pokt-onboard/
 Then add `deploy/nginx-onboard.conf` (or `deploy/Caddyfile.onboard`) to the
 existing organiccryptoyyc.com site, test the config (`nginx -t`) and reload.
 
-`.env` values to set: `PORT=8080`, `HOST=127.0.0.1`, `WEB_APP_URL=https://organiccryptoyyc.com/onboard/`,
-`CORS_ORIGINS=https://organiccryptoyyc.com`, `SOLANA_RPC_URL` (a paid RPC is
+`.env` values to set: `PORT=8080`, `HOST=127.0.0.1`, `WEB_APP_URL=https://onboard.organiccryptoyyc.com/`,
+`CORS_ORIGINS=https://onboard.organiccryptoyyc.com`, `SOLANA_RPC_URL` (a paid RPC is
 recommended), `JUPITER_API_KEY` if you have one.
 
 The API listens on 127.0.0.1:8080 only behind the web server. For the Pocket
