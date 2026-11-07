@@ -109,5 +109,5 @@ export function createServer() {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  createServer().listen(config.port, () => console.log(`${config.serviceId} ${config.version} listening on :${config.port}`));
+  createServer().listen(config.port, config.host, () => console.log(`${config.serviceId} ${config.version} listening on ${config.host}:${config.port}`));
 }

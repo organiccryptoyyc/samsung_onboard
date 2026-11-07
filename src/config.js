@@ -6,6 +6,7 @@ const num = (k, d) => Number(env(k, d));
 
 export const config = {
   port: num('PORT', 8080),
+  host: env('HOST', '0.0.0.0'),
   version: '0.1.0',
   serviceId: env('SERVICE_ID', 'pokt-onboard'),
   upstreamDeadlineMs: num('UPSTREAM_DEADLINE_MS', 8000),
