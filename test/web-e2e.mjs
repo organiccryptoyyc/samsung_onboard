@@ -65,6 +65,8 @@ try {
   await pg.waitForSelector('#gas-notice:not([hidden])');
   await pg.click('#start');
   await pg.waitForSelector('#step-gas');
+  await pg.waitForSelector('#step-connect-ai [data-copy-url]');
+  await pg.waitForSelector('details.legal');
   await pg.fill('#fund-form [name=buy]', '40');
   await pg.click('#fund-form button');
   await pg.waitForSelector('text=Send 50.00 USDC');
@@ -102,6 +104,11 @@ try {
   await pg.click('#sheet-close');
   await pg.click('[data-tile=marketplace]');
   await pg.waitForSelector('text=Clinical Trials Search');
+
+  await pg.click('#sheet-close');
+  await pg.click('#disclosures');
+  await pg.waitForSelector('text=non-custodial', { state: 'attached' });
+  await pg.click('#sheet-close');
 
   // Desktop, dark theme screenshot.
   const dk = await page({ width: 1280, height: 900 }, 'dark');

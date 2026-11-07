@@ -4,6 +4,7 @@
 import { config } from './config.js';
 import { MINTS } from './config.js';
 import * as sol from './solana.js';
+import { DISCLOSURES } from './legal.js';
 
 const STEPS = {
   samsung: [
@@ -17,6 +18,15 @@ const STEPS = {
       title: 'Install a Solana wallet',
       body: 'Install Phantom or Solflare from the Galaxy Store or Google Play. Create a wallet and write the recovery phrase on paper. Never type it into a website or share it, including with an AI.',
       links: [{ label: 'Phantom', url: 'https://phantom.com' }, { label: 'Solflare', url: 'https://solflare.com' }],
+    },
+    {
+      id: 'connect-ai',
+      title: 'Connect your AI to Pocket (recommended)',
+      body: 'Add Pocket\'s Agent Marketplace to Claude, ChatGPT or another assistant as a connector (MCP), using the address below. Why it helps: your assistant can then look up live POKT prices and fees, explain each step in plain words, plan the bridge to native POKT, and search 100+ Pocket services for you. Searching is free. Paid calls cost $0.005 each in USDC on Base. If you let your assistant pay, give it a separate spending wallet with a small balance and a spending cap, never your main wallet or its recovery phrase.',
+      links: [
+        { label: 'Pocket MCP connector', url: 'https://agent.pocket.network/mcp' },
+        { label: 'Setup guide', url: 'https://agent.pocket.network/agent-integration' },
+      ],
     },
     {
       id: 'send-usdc',
@@ -40,8 +50,8 @@ const STEPS = {
     },
     {
       id: 'ai-tools',
-      title: 'Use Pocket with your AI',
-      body: 'Pocket Network serves blockchain data and AI tools to agents for $0.005 a call, paid in USDC. Connect the Pocket MCP server to Claude, ChatGPT or another assistant to search and use those services.',
+      title: 'Keep exploring with your AI',
+      body: 'With Pocket connected, ask your assistant things like "what is my POKT worth?", "plan moving my POKT to Pocket Network to stake" or "find a Pocket service for Ethereum data". It plans and explains; you approve every transaction in your own wallet.',
       links: [{ label: 'Agent Marketplace', url: 'https://agent.pocket.network' }],
     },
     {
@@ -69,6 +79,7 @@ export async function guide({ audience = 'samsung', goal = 'pokt', solana } = {}
     app: config.webAppUrl || null,
     tokens: { usdc_mint: MINTS.USDC, pokt_mint: MINTS.POKT },
     for_assistants: 'Walk the person through these steps one at a time. Never ask for a recovery phrase or private key. Use /v1/samsung/fund-plan with their Solana address for exact amounts.',
+    disclosures: DISCLOSURES,
   };
   if (solana) {
     const [holdings, rent] = await Promise.all([sol.solanaHoldings(solana), sol.rentCosts()]);

@@ -125,6 +125,20 @@ async function refreshWallet() {
   } catch { /* balances are optional for the menu */ }
 }
 
+// ---------- disclosures ----------
+function disclosuresHtml(d) {
+  if (!d) return '';
+  return `<details class="legal"><summary>Disclosures</summary>${d.items.map((i) => `<p>${esc(i.text)}</p>`).join('')}<p class="muted">Version ${esc(d.version)}</p></details>`;
+}
+
+async function showDisclosures() {
+  openSheet('Disclosures', '<p class="muted">Loading…</p>');
+  try {
+    const g = await api('/v1/guide', {});
+    body().innerHTML = g.disclosures.items.map((i) => `<p>${esc(i.text)}</p>`).join('') + `<p class="muted">Version ${esc(g.disclosures.version)}</p>`;
+  } catch (e) { showError(body(), e); }
+}
+
 // ---------- guide (Samsung onboarding) ----------
 async function showGuide() {
   openSheet('Get started', '<p class="muted">Loading your guide…</p>');
@@ -133,8 +147,12 @@ async function showGuide() {
     body().innerHTML = `
       <p class="muted">${esc(g.reading_time_min)} minute read. Your wallet signs every step.</p>
       <ol class="steps">${g.steps.map((s) => `<li id="step-${esc(s.id)}"><h3>${esc(s.title)}</h3><p>${esc(s.body)}</p>
-        ${(s.links || []).map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(' · ')}</li>`).join('')}</ol>
-      <div class="stack" id="fund"></div>`;
+        ${(s.links || []).map((l) => (l.url.endsWith('/mcp')
+          ? `<button class="ghost small" type="button" data-copy-url="${esc(l.url)}">Copy connector address</button>`
+          : `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`)).join(' ')}</li>`).join('')}</ol>
+      <div class="stack" id="fund"></div>
+      ${disclosuresHtml(g.disclosures)}`;
+    body().querySelectorAll('[data-copy-url]').forEach((b) => { b.onclick = () => copy(b.dataset.copyUrl); });
     renderFund($('#fund'));
   } catch (e) { showError(body(), e); }
 }
@@ -345,6 +363,7 @@ $('#connect-sol').onclick = onConnectSol;
 $('#connect-keplr').onclick = onConnectKeplr;
 $('#start').onclick = showGuide;
 $('#gas-btn').onclick = showGas;
+$('#disclosures').onclick = showDisclosures;
 $('#sheet-close').onclick = closeSheet;
 $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') closeSheet(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet(); });

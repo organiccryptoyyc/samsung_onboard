@@ -221,6 +221,8 @@ test('get-started guide, with and without a wallet', async () => {
   assert.equal(g.status, 200);
   assert.deepEqual(g.body.chains, ['solana', 'pocket']);
   assert.ok(g.body.steps.some((s) => s.id === 'gas' && s.body.includes('$10')));
+  assert.equal(g.body.steps[2].id, 'connect-ai');
+  assert.ok(g.body.disclosures.items.length >= 5);
   assert.ok(!g.body.steps.some((s) => s.id === 'go-native'));
   const stake = await call('/v1/guide', { goal: 'stake', solana: m.OWNER_NO_SOL });
   assert.ok(stake.body.steps.some((s) => s.id === 'go-native'));
