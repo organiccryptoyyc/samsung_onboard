@@ -1,0 +1,15 @@
+{
+  "name": "pokt-onboard",
+  "version": "0.1.0",
+  "description": "POKT onboarding API: quotes, routes and unsigned transactions for buying, bridging and staking POKT. A Pocket Network REST service.",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "repository": "github:organiccryptoyyc/samsung_onboard"
+}

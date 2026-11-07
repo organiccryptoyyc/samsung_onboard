@@ -1,0 +1,1535 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "POKT Onboarding API",
+    "version": "0.1.0",
+    "description": "Quotes, bridge routes and unsigned transactions for buying, moving and staking POKT, including funding from Samsung Wallet USDC. Non-custodial: the user's wallet signs everything. Every response is JSON."
+  },
+  "servers": [
+    {
+      "url": "https://YOUR-SUPPLIER-HOST"
+    }
+  ],
+  "paths": {
+    "/v1/version": {
+      "get": {
+        "summary": "Service identity probe",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "Readiness probe",
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/menu": {
+      "post": {
+        "summary": "Menu layout for a wallet",
+        "operationId": "menu",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wallet": {
+                    "type": "string",
+                    "description": "Wallet in use",
+                    "enum": [
+                      "phantom",
+                      "solflare",
+                      "keplr",
+                      "leap",
+                      "soothe",
+                      "metamask",
+                      "samsung",
+                      "none"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace": {
+      "post": {
+        "summary": "Agentic Portal services (the Agent Marketplace bar)",
+        "operationId": "marketplace",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Text filter"
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Category filter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/services": {
+      "post": {
+        "summary": "Every Pocket service, live from chain, with PNG icon URLs",
+        "operationId": "services",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filter": {
+                    "type": "string",
+                    "description": "Text filter"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ai/connect": {
+      "post": {
+        "summary": "MCP, OpenAPI and llms.txt links plus a client config snippet",
+        "operationId": "aiConnect",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "type": "string",
+                    "description": "AI client",
+                    "enum": [
+                      "claude",
+                      "cursor",
+                      "other"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ai/packs": {
+      "post": {
+        "summary": "AI tool pack manifest (planned)",
+        "operationId": "aiPacks",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/account": {
+      "post": {
+        "summary": "Balances: SOL, USDC and POKT on Solana; native POKT and account status on Pocket",
+        "operationId": "account",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "solana": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "pokt": {
+                    "type": "string",
+                    "description": "Pocket address (pokt1...)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quote/buy": {
+      "post": {
+        "summary": "Quote USDC (or another token) to POKT on Solana",
+        "operationId": "quoteBuy",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pay_token": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quote/sell": {
+      "post": {
+        "summary": "Quote POKT to USDC (or another token) on Solana",
+        "operationId": "quoteSell",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "receive_token": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/quote/swap": {
+      "post": {
+        "summary": "Quote any token to or from POKT",
+        "operationId": "quoteSwap",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "output": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "input",
+                  "output",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tx/swap": {
+      "post": {
+        "summary": "Unsigned Solana swap transaction for the owner to sign",
+        "operationId": "txSwap",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "input": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "output": {
+                    "type": "string",
+                    "description": "USDC, SOL, POKT or a Solana mint address"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  },
+                  "receiver": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "accept_high_impact": {
+                    "type": "boolean",
+                    "description": "Allow price impact above the limit"
+                  }
+                },
+                "required": [
+                  "owner",
+                  "input",
+                  "output",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tx/execute": {
+      "post": {
+        "summary": "Submit a wallet-signed swap transaction",
+        "operationId": "txExecute",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signed_transaction": {
+                    "type": "string",
+                    "description": "Base64 signed transaction"
+                  },
+                  "request_id": {
+                    "type": "string",
+                    "description": "request_id from the swap"
+                  }
+                },
+                "required": [
+                  "signed_transaction",
+                  "request_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/gas/starter": {
+      "post": {
+        "summary": "Buy a little SOL with USDC (gasless) so a USDC-only wallet can pay fees",
+        "operationId": "gasStarter",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "target_sol": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "owner"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/samsung/fund-plan": {
+      "post": {
+        "summary": "How much USDC to send from Samsung Wallet, with QR and steps",
+        "operationId": "samsungFundPlan",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "buy_usd": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  },
+                  "target": {
+                    "type": "string",
+                    "description": "What to end up with",
+                    "enum": [
+                      "pokt",
+                      "sol",
+                      "native-pokt"
+                    ]
+                  }
+                },
+                "required": [
+                  "owner",
+                  "buy_usd"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deposit/check": {
+      "post": {
+        "summary": "Has the USDC from Samsung Wallet arrived?",
+        "operationId": "depositCheck",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "expected_usdc": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "owner"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/samsung/payout": {
+      "post": {
+        "summary": "Sell POKT and deliver USDC to a Samsung Wallet address (unsigned)",
+        "operationId": "samsungPayout",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "owner": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "samsung_address": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  },
+                  "pokt_amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "owner",
+                  "samsung_address",
+                  "pokt_amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/route/native": {
+      "post": {
+        "summary": "Step-by-step bridge route to native POKT",
+        "operationId": "routeNative",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from_chain": {
+                    "type": "string",
+                    "description": "Where the POKT is now",
+                    "enum": [
+                      "solana",
+                      "base",
+                      "arbitrum",
+                      "ethereum"
+                    ]
+                  },
+                  "dest": {
+                    "type": "string",
+                    "description": "Pocket address (pokt1...)"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  }
+                },
+                "required": [
+                  "from_chain",
+                  "dest",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/route/status": {
+      "post": {
+        "summary": "Status of a Solana transaction",
+        "operationId": "routeStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "signature": {
+                    "type": "string",
+                    "description": "Transaction signature"
+                  }
+                },
+                "required": [
+                  "signature"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stake/options": {
+      "post": {
+        "summary": "Live staking minimums, validators and staking paths",
+        "operationId": "stakeOptions",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "validators_limit": {
+                    "type": "integer",
+                    "description": "Max validators returned (default 25, max 100)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tx/delegate": {
+      "post": {
+        "summary": "Unsigned MsgDelegate for Keplr or Leap",
+        "operationId": "txDelegate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "delegator": {
+                    "type": "string",
+                    "description": "Pocket address (pokt1...)"
+                  },
+                  "validator": {
+                    "type": "string",
+                    "description": "poktvaloper1... address"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  },
+                  "memo": {
+                    "type": "string",
+                    "description": "Optional memo"
+                  }
+                },
+                "required": [
+                  "delegator",
+                  "validator",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tx/send": {
+      "post": {
+        "summary": "Unsigned MsgSend of native POKT for Keplr or Leap",
+        "operationId": "txSend",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "type": "string",
+                    "description": "Pocket address (pokt1...)"
+                  },
+                  "to": {
+                    "type": "string",
+                    "description": "Pocket address (pokt1...)"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "Decimal amount as a string, e.g. \"25.5\""
+                  },
+                  "memo": {
+                    "type": "string",
+                    "description": "Optional memo"
+                  }
+                },
+                "required": [
+                  "from",
+                  "to",
+                  "amount"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

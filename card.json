@@ -1,0 +1,15 @@
+{
+  "schema": "REPLACE: copy the schema value from service-builder templates/card.json",
+  "summary": "POKT onboarding: quotes, bridge routes and unsigned transactions for buying, moving and staking POKT, including funding from Samsung Wallet USDC on Solana. Non-custodial; the user's wallet signs.",
+  "rpc_types": [{ "type": "REST", "intent": "primary" }],
+  "apis": ["pokt-onboard-v1"],
+  "specs": [{ "api": "pokt-onboard-v1", "kind": "openapi", "url": "https://REPLACE-WITH-PUBLISHED-URL/openapi.json" }],
+  "results": "variable",
+  "serving": {
+    "healthcheck": [
+      { "rpc_type": "REST", "request": { "path": "/v1/version", "method": "GET" }, "expect": { "json_path": "$.service", "matches": "^pokt-onboard$" } },
+      { "rpc_type": "REST", "request": { "path": "/v1/health", "method": "GET" }, "expect": { "json_path": "$.status", "matches": "^ok$" } },
+      { "rpc_type": "REST", "request": { "path": "/v1/menu", "method": "POST", "body": {} }, "expect": { "json_path": "$.tiles[0].id", "matches": "^marketplace$" } }
+    ]
+  }
+}
