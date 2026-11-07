@@ -45,6 +45,86 @@
         }
       }
     },
+    "/v1/guide": {
+      "post": {
+        "summary": "Get-started guide for Samsung Wallet USDC users: Solana and Pocket, step by step",
+        "operationId": "guide",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "audience": {
+                    "type": "string",
+                    "description": "Who the guide is for",
+                    "enum": [
+                      "samsung"
+                    ]
+                  },
+                  "goal": {
+                    "type": "string",
+                    "description": "What the person wants",
+                    "enum": [
+                      "pokt",
+                      "sol",
+                      "stake"
+                    ]
+                  },
+                  "solana": {
+                    "type": "string",
+                    "description": "Solana address (base58)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Valid input that cannot be done (e.g. below gasless minimum, high price impact)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "An upstream (Jupiter, Solana RPC, Pocket chain, Agentic Portal) failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/menu": {
       "post": {
         "summary": "Menu layout for a wallet",

@@ -33,6 +33,10 @@ export const config = {
 
   portalBase: env('PORTAL_BASE_URL', 'https://agent.pocket.network'),
   iconBaseUrl: env('ICON_BASE_URL', ''),
+  // Public URL of the web app, shown in the guide.
+  webAppUrl: env('WEB_APP_URL', ''),
+  // Origins allowed to call the API from a browser (comma-separated, or *).
+  corsOrigins: env('CORS_ORIGINS', '*').split(',').map((o) => o.trim()),
 };
 
 export const MINTS = {

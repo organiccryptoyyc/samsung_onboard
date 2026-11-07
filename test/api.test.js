@@ -215,3 +215,23 @@ test('openapi.json documents exactly the served routes', async () => {
   const documented = Object.entries(spec.paths).flatMap(([p, ops]) => Object.keys(ops).map((m) => `${m.toUpperCase()} ${p}`)).sort();
   assert.deepEqual(documented, Object.keys(ROUTES).sort());
 });
+
+test('get-started guide, with and without a wallet', async () => {
+  const g = await call('/v1/guide', {});
+  assert.equal(g.status, 200);
+  assert.deepEqual(g.body.chains, ['solana', 'pocket']);
+  assert.ok(g.body.steps.some((s) => s.id === 'gas' && s.body.includes('$10')));
+  assert.ok(!g.body.steps.some((s) => s.id === 'go-native'));
+  const stake = await call('/v1/guide', { goal: 'stake', solana: m.OWNER_NO_SOL });
+  assert.ok(stake.body.steps.some((s) => s.id === 'go-native'));
+  assert.equal(stake.body.your_wallet.next, 'gas');
+  assert.doesNotMatch(g.text.slice(0, 2048), ERROR_WORDS);
+});
+
+test('browser CORS preflight and headers', async () => {
+  const pre = await fetch(base + '/v1/guide', { method: 'OPTIONS', headers: { origin: 'https://app.example' } });
+  assert.equal(pre.status, 204);
+  assert.equal(pre.headers.get('access-control-allow-origin'), '*');
+  const r = await fetch(base + '/v1/health', { headers: { origin: 'https://app.example' } });
+  assert.equal(r.headers.get('access-control-allow-origin'), '*');
+});

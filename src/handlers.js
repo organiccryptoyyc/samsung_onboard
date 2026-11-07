@@ -10,6 +10,7 @@ import * as jup from './jupiter.js';
 import * as pocket from './pocket.js';
 import * as cosmos from './cosmos.js';
 import * as cat from './catalog.js';
+import { guide as buildGuide } from './guide.js';
 
 const MINT_BY_SYMBOL = { USDC: MINTS.USDC, SOL: MINTS.SOL, POKT: MINTS.POKT };
 
@@ -318,4 +319,13 @@ export async function txSend(body) {
   const units = v.toBaseUnits(v.positiveAmount(body, 'amount'), 6);
   const acct = await requireAccount(from);
   return { ...cosmos.sendTx({ from, to, units, acct, memo: String(body?.memo ?? '') }), sign_with: ['keplr', 'leap'], explorer_tx: config.pocketExplorerTx };
+}
+
+// ---------------- get-started guide ----------------
+
+export async function guide(body) {
+  const audience = v.oneOf(body, 'audience', ['samsung'], 'samsung');
+  const goal = v.oneOf(body, 'goal', ['pokt', 'sol', 'stake'], 'pokt');
+  const solana = v.solAddr(body, 'solana', false);
+  return buildGuide({ audience, goal, solana });
 }
