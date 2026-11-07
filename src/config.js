@@ -20,7 +20,7 @@ export const config = {
   pocketGasPrice: num('POCKET_GAS_PRICE', 0.01),
   pocketExplorerTx: env('POCKET_EXPLORER_TX', 'https://explorer.pocket.network/pocket-mainnet/tx/'),
 
-  solanaRpc: env('SOLANA_RPC_URL', 'https://api.mainnet-beta.solana.com'),
+  solanaRpc: env('SOLANA_RPC_URL', 'https://solana.api.pocket.network'),
 
   // Jupiter swap API. Kept behind src/jupiter.js so a version change touches one file.
   jupiterBase: env('JUPITER_BASE_URL', 'https://api.jup.ag/ultra/v1'),
