@@ -10,6 +10,7 @@ import { ApiError } from './errors.js';
 import * as h from './handlers.js';
 
 export const ROUTES = {
+  'POST /v1/guide': h.guide,
   'POST /v1/menu': h.menu,
   'POST /v1/services': h.services,
   'POST /v1/marketplace': h.marketplace,
@@ -34,9 +35,20 @@ export const ROUTES = {
   'GET /v1/health': async () => ({ status: 'ok' }),
 };
 
+// CORS lets the web app call the API directly over HTTPS. Pocket relays ignore
+// response headers, so this only matters for browser clients.
+function cors(req) {
+  const origin = req.headers.origin;
+  if (!origin) return {};
+  const allowed = config.corsOrigins.includes('*') || config.corsOrigins.includes(origin);
+  return allowed
+    ? { 'access-control-allow-origin': config.corsOrigins.includes('*') ? '*' : origin, 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-allow-headers': 'content-type', 'access-control-max-age': '86400', vary: 'origin' }
+    : {};
+}
+
 function send(res, status, obj) {
   const body = JSON.stringify(obj);
-  res.writeHead(status, { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) });
+  res.writeHead(status, { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body), ...(res.corsHeaders || {}) });
   res.end(body);
 }
 
@@ -58,6 +70,11 @@ function readBody(req) {
 
 export async function handle(req, res) {
   const path = new URL(req.url, 'http://x').pathname.replace(/\/+$/, '') || '/';
+  res.corsHeaders = cors(req);
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, res.corsHeaders);
+    return res.end();
+  }
   const fn = ROUTES[`${req.method} ${path}`];
   try {
     if (!fn) {
@@ -92,5 +109,5 @@ export function createServer() {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  createServer().listen(config.port, () => console.log(`${config.serviceId} ${config.version} listening on :${config.port}`));
+  createServer().listen(config.port, config.host, () => console.log(`${config.serviceId} ${config.version} listening on ${config.host}:${config.port}`));
 }

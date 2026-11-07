@@ -6,6 +6,7 @@ const num = (k, d) => Number(env(k, d));
 
 export const config = {
   port: num('PORT', 8080),
+  host: env('HOST', '0.0.0.0'),
   version: '0.1.0',
   serviceId: env('SERVICE_ID', 'pokt-onboard'),
   upstreamDeadlineMs: num('UPSTREAM_DEADLINE_MS', 8000),
@@ -19,7 +20,7 @@ export const config = {
   pocketGasPrice: num('POCKET_GAS_PRICE', 0.01),
   pocketExplorerTx: env('POCKET_EXPLORER_TX', 'https://explorer.pocket.network/pocket-mainnet/tx/'),
 
-  solanaRpc: env('SOLANA_RPC_URL', 'https://api.mainnet-beta.solana.com'),
+  solanaRpc: env('SOLANA_RPC_URL', 'https://solana.api.pocket.network'),
 
   // Jupiter swap API. Kept behind src/jupiter.js so a version change touches one file.
   jupiterBase: env('JUPITER_BASE_URL', 'https://api.jup.ag/ultra/v1'),
@@ -33,6 +34,10 @@ export const config = {
 
   portalBase: env('PORTAL_BASE_URL', 'https://agent.pocket.network'),
   iconBaseUrl: env('ICON_BASE_URL', ''),
+  // Public URL of the web app, shown in the guide.
+  webAppUrl: env('WEB_APP_URL', ''),
+  // Origins allowed to call the API from a browser (comma-separated, or *).
+  corsOrigins: env('CORS_ORIGINS', '*').split(',').map((o) => o.trim()),
 };
 
 export const MINTS = {

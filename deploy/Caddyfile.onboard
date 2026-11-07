@@ -1,0 +1,10 @@
+# Add inside the existing organiccryptoyyc.com { ... } site block.
+redir /onboard /onboard/
+handle_path /onboard/api/* {
+    reverse_proxy 127.0.0.1:8080
+}
+handle_path /onboard/* {
+    root * /var/www/pokt-onboard
+    try_files {path} /index.html
+    file_server
+}

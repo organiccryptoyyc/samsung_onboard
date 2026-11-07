@@ -9,7 +9,8 @@ Design review: https://claude.ai/artifact/FBxykyt5Ze9mgGNiSDWTgH
 ```bash
 cp .env.example .env      # point at your RPC / LCD / Jupiter key
 node --env-file=.env src/server.js
-npm test                  # 19 tests against mocked upstreams, no network needed
+npm test                  # 21 API tests against mocked upstreams, no network needed
+node test/web-e2e.mjs     # browser check of the web app (needs Playwright)
 node scripts/build-openapi.js   # regenerate openapi.json after changing endpoints
 ```
 
@@ -21,6 +22,7 @@ Every endpoint is `POST` with a JSON body, except the two probes. Every reply is
 
 | Menu tile | Endpoint | What it returns | Signer |
 |---|---|---|---|
+| Get started | `/v1/guide` | Step-by-step guide for Samsung Wallet USDC users (Solana + Pocket); with a `solana` address it adds live balances and the next step. The $0.005 product agents buy | n/a |
 | (all) | `/v1/menu` | Tile layout; Agent Marketplace = 2 units; sign / guided / info per wallet | n/a |
 | Agent Marketplace | `/v1/marketplace` | Agentic Portal services, how to pay (x402 / MPP) | n/a |
 | Buy / Sell / Swap | `/v1/quote/buy`, `/v1/quote/sell`, `/v1/quote/swap` | Jupiter quote, price impact, thin-liquidity warning | n/a |
@@ -36,6 +38,23 @@ Every endpoint is `POST` with a JSON body, except the two probes. Every reply is
 | Services | `/v1/services` | Every Pocket service from chain, PNG icon URL | n/a |
 | AI Connect / Packs | `/v1/ai/connect`, `/v1/ai/packs` | MCP, npm, OpenAPI links + config snippet; pack manifest (planned) | n/a |
 | probes | `GET /v1/version`, `GET /v1/health` | Identity, readiness | n/a |
+
+## Web app
+
+`web/` is a static web app (installable PWA, no build step) with the full menu, the Samsung onboarding flow, gas starter, swaps, native route, staking with Keplr, services, marketplace and AI connect. It calls the API directly over HTTPS (the API sends CORS headers; set `CORS_ORIGINS` to the app's origin in production). Wallet signing libraries (`@solana/web3.js`, `@cosmjs/stargate`) and the QR library load from jsDelivr only when needed.
+
+- Set `apiBase` in `web/config.js` to the API's public HTTPS address.
+- Host `web/` on any static host (Cloudflare Pages, Vercel, GitHub Pages). On phones without a wallet extension, the app offers "Open in Phantom / Solflare" links that reopen it inside the wallet's browser.
+- Deep links for marketing: `/#start` opens the guide, `/?tile=buy` opens a tile.
+- The palette and the "P" icon are placeholders until Pocket Network Foundation brand colours and sign-off are in hand.
+
+## Deploy
+
+1. **API:** `docker build -t pokt-onboard .` and run it on any small server with Caddy or nginx in front for TLS. Set `.env` (RPC, LCD, Jupiter key, `WEB_APP_URL`, `CORS_ORIGINS`).
+2. **Web app:** publish `web/` to a static host; point `apiBase` at step 1.
+3. **Pocket Beta:** register `pokt-onboard`, stake a supplier and run the RelayMiner in front of the same API (steps below), test with `pocket-ap`.
+4. **MainNet:** re-fetch fees and minimums, register and stake on MainNet, publish the gateway entry.
+5. **Agent Marketplace:** get the service (especially `/v1/guide`) listed at agent.pocket.network so assistants can buy the guide for $0.005.
 
 ## Pocket relay rules this code follows
 

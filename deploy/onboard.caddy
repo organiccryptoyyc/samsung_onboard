@@ -1,0 +1,18 @@
+# Own site for the subdomain. Drop into the Caddy sites/ folder that the
+# main Caddyfile imports. Caddy gets the TLS certificate itself
+# (DNS record must be "DNS only" in Cloudflare, or proxied with SSL "Full").
+onboard.organiccryptoyyc.com {
+	encode gzip
+	handle_path /api/* {
+		# Host address of the API as seen from the Caddy container.
+		reverse_proxy 172.18.0.1:8080
+	}
+	handle {
+		# Path of web/ as mounted inside the Caddy container.
+		root * /etc/caddy/sites/onboard-web
+		try_files {path} /index.html
+		file_server
+	}
+	@nocache path /sw.js /config.js
+	header @nocache Cache-Control "no-cache"
+}

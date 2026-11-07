@@ -1,0 +1,19 @@
+[Unit]
+Description=POKT Onboard API
+After=network-online.target
+
+[Service]
+Type=simple
+User=pokt-onboard
+WorkingDirectory=/opt/pokt-onboard
+EnvironmentFile=/opt/pokt-onboard/.env
+ExecStart=/usr/bin/env node src/server.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

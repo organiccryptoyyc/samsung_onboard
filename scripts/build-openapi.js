@@ -8,6 +8,7 @@ const amount = S('string', 'Decimal amount as a string, e.g. "25.5"');
 const token = S('string', 'USDC, SOL, POKT or a Solana mint address');
 
 const E = [
+  ['/v1/guide', 'Get-started guide for Samsung Wallet USDC users: Solana and Pocket, step by step', { audience: S('string', 'Who the guide is for', { enum: ['samsung'] }), goal: S('string', 'What the person wants', { enum: ['pokt', 'sol', 'stake'] }), solana: solAddr }, []],
   ['/v1/menu', 'Menu layout for a wallet', { wallet: S('string', 'Wallet in use', { enum: ['phantom', 'solflare', 'keplr', 'leap', 'soothe', 'metamask', 'samsung', 'none'] }) }, []],
   ['/v1/marketplace', 'Agentic Portal services (the Agent Marketplace bar)', { query: S('string', 'Text filter'), category: S('string', 'Category filter') }, []],
   ['/v1/services', 'Every Pocket service, live from chain, with PNG icon URLs', { filter: S('string', 'Text filter') }, []],

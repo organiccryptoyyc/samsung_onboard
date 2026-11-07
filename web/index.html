@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>POKT Onboard</title>
+  <meta name="description" content="Turn USDC from Samsung Wallet into SOL and POKT, stake native POKT, and connect Pocket's AI tools. Non-custodial: your wallet signs everything.">
+  <meta name="theme-color" content="#0b0e1c">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/app.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/app.svg" alt="" width="32" height="32">
+      <span>POKT Onboard</span>
+    </div>
+    <div class="wallets" id="wallets">
+      <button class="chip" id="connect-sol" type="button">Connect Solana wallet</button>
+      <button class="chip" id="connect-keplr" type="button">Connect Keplr</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="hero">
+      <p class="eyebrow">New to crypto?</p>
+      <h1>Got USDC in Samsung Wallet? Start here.</h1>
+      <p>Turn it into SOL and POKT in a few taps. Your wallet signs every step; we never hold your funds.</p>
+      <button class="primary" id="start" type="button">Get started</button>
+    </section>
+
+    <section class="notice" id="gas-notice" hidden>
+      <div>
+        <strong>Your wallet needs a little SOL for fees.</strong>
+        <span id="gas-detail">Swap about $10 of USDC into SOL in one tap. No SOL needed beforehand.</span>
+      </div>
+      <button class="primary small" id="gas-btn" type="button">Get gas</button>
+    </section>
+
+    <nav class="menu" aria-label="POKT menu">
+      <button class="tile wide" data-tile="marketplace" type="button">
+        <span class="pills" aria-hidden="true"><span>Blockchain RPC</span><span>Web search</span><span>SEC filings</span><span>Clinical trials</span><span>Sanctions screening</span></span>
+        <span class="tile-title">Agent Marketplace</span>
+        <span class="tile-sub">AI services on Pocket, $0.005 a call</span>
+      </button>
+      <button class="tile" data-tile="buy" type="button"><span class="tile-title">Buy</span><span class="tile-sub">USDC to POKT</span></button>
+      <button class="tile" data-tile="sell" type="button"><span class="tile-title">Sell</span><span class="tile-sub">POKT to USDC</span></button>
+      <button class="tile" data-tile="swap" type="button"><span class="tile-title">Swap</span><span class="tile-sub">Any token and POKT</span></button>
+      <button class="tile" data-tile="native" type="button"><span class="tile-title">Native</span><span class="tile-sub">Bridge to Pocket</span></button>
+      <button class="tile" data-tile="stake" type="button"><span class="tile-title">Stake</span><span class="tile-sub">Delegate native POKT</span></button>
+      <button class="tile" data-tile="services" type="button"><span class="tile-title">Services</span><span class="tile-sub">Chains Pocket serves</span></button>
+      <button class="tile" data-tile="ai_packs" type="button"><span class="tile-title">AI Tool Packs</span><span class="tile-sub">Coming soon</span></button>
+      <button class="tile" data-tile="ai_connect" type="button"><span class="tile-title">AI Connect</span><span class="tile-sub">MCP and API links</span></button>
+    </nav>
+
+    <p class="foot">Independent, non-custodial software. Not affiliated with Samsung, Anthropic, OpenAI, Solana Foundation or Pocket Network Foundation. Not financial advice; crypto assets can lose value. <button class="linkish" id="disclosures" type="button">Disclosures</button></p>
+  </main>
+
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+    <div class="sheet-card">
+      <div class="sheet-head">
+        <h2 id="sheet-title"></h2>
+        <button class="icon-btn" id="sheet-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div id="sheet-body"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
