@@ -110,6 +110,11 @@ async function onConnectSol() {
 async function onConnectKeplr() {
   try {
     const r = await connectKeplr();
+    if (!r.ok && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      return openSheet('Keplr on your phone', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>The Keplr phone app can't connect to websites yet. We're adding a "connect with Keplr Mobile" option soon.</p></div>
+        <p>Keplr is only needed to <strong>stake</strong> native POKT. For now, stake from a computer with the Keplr browser extension.</p>
+        <p class="muted">Buy, sell and swap work on this phone with Phantom or Solflare.</p>`);
+    }
     if (!r.ok) return toast(r.message);
     $('#connect-keplr').textContent = `POKT ${short(r.address)}`;
     $('#connect-keplr').classList.add('on');
@@ -381,17 +386,34 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 
 // ---------- install as an app (Android Chrome, Samsung Internet, desktop Chrome/Edge) ----------
 let installPrompt = null;
+const ua = navigator.userAgent;
+const isPhone = /Android|iPhone|iPad|iPod/i.test(ua);
+const isInstalled = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+// Phones always get the button: many mobile browsers never fire beforeinstallprompt,
+// so the button falls back to step-by-step instructions for the browser in use.
+if (isPhone && !isInstalled()) $('#install').hidden = false;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   installPrompt = e;
   $('#install').hidden = false;
 });
+function installSteps() {
+  if (/iPhone|iPad|iPod/i.test(ua)) return ['Open this page in Safari.', 'Tap the Share button (the square with an arrow).', 'Tap "Add to Home Screen", then "Add".'];
+  if (/SamsungBrowser/i.test(ua)) return ['Tap the install icon in the address bar if you see one.', 'Otherwise tap the ☰ menu at the bottom right.', 'Tap "Add page to", then "Home screen".'];
+  if (/Firefox/i.test(ua)) return ['Tap the ⋮ menu.', 'Tap "Install" or "Add to Home screen".'];
+  return ['Tap the ⋮ menu at the top right.', 'Tap "Install app" (or "Add to Home screen").', 'Tap "Install".'];
+}
 $('#install').onclick = async () => {
-  if (!installPrompt) return;
-  installPrompt.prompt();
-  await installPrompt.userChoice.catch(() => null);
-  installPrompt = null;
-  $('#install').hidden = true;
+  if (installPrompt) {
+    installPrompt.prompt();
+    await installPrompt.userChoice.catch(() => null);
+    installPrompt = null;
+    if (isInstalled()) $('#install').hidden = true;
+    return;
+  }
+  openSheet('Install Pokt Pal', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>Pokt Pal installs from your browser, no app store needed. It gets its own icon and opens full screen.</p></div>
+    <ol class="steps">${installSteps().map((t) => `<li><p>${esc(t)}</p></li>`).join('')}</ol>
+    <p class="muted">Don't see the option? Reload the page once and try again.</p>`);
 };
 window.addEventListener('appinstalled', () => { $('#install').hidden = true; toast('Pokt Pal installed. Nodus is pleased.'); });
 
