@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>POKT Onboard</title>
-  <meta name="description" content="Turn USDC from Samsung Wallet into SOL and POKT, stake native POKT, and connect Pocket's AI tools. Non-custodial: your wallet signs everything.">
+  <title>Pokt Pal</title>
+  <meta name="description" content="Pokt Pal: turn USDC from Samsung Wallet into SOL and POKT, stake native POKT, and connect Pocket's AI tools. Non-custodial: your wallet signs everything.">
   <meta name="theme-color" content="#0b0e1c">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/app.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Pokt Pal">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
   <script type="module" src="app.js"></script>
@@ -16,9 +19,10 @@
   <header class="top">
     <div class="brand">
       <img src="icons/app.svg" alt="" width="32" height="32">
-      <span>POKT Onboard</span>
+      <span>Pokt Pal</span>
     </div>
     <div class="wallets" id="wallets">
+      <button class="chip install" id="install" type="button" hidden>Install app</button>
       <button class="chip" id="connect-sol" type="button">Connect Solana wallet</button>
       <button class="chip" id="connect-keplr" type="button">Connect Keplr</button>
     </div>
@@ -26,6 +30,14 @@
 
   <main id="main">
     <section class="hero" id="hero">
+      <div class="pals" aria-label="Nodus the node and Pip the AI">
+        <img class="nodus" src="pals/nodus.svg" alt="Nodus, a Pocket node with a monocle" width="112" height="123">
+        <div class="bubbles">
+          <p class="bubble from-nodus"><b>Nodus:</b> <span id="nodus-line">Phase one: your USDC.</span></p>
+          <p class="bubble from-pip"><b>Pip:</b> <span id="pip-line">He means: swap it to POKT in a few taps. Your wallet signs. We never touch your keys.</span></p>
+        </div>
+        <img class="pip" src="pals/pip.svg" alt="Pip, a little AI spark" width="72" height="72">
+      </div>
       <p class="eyebrow">New to crypto?</p>
       <h1>Got USDC in Samsung Wallet? Start here.</h1>
       <p>Turn it into SOL and POKT in a few taps. Your wallet signs every step; we never hold your funds.</p>
@@ -56,7 +68,7 @@
       <button class="tile" data-tile="ai_connect" type="button"><span class="tile-title">AI Connect</span><span class="tile-sub">MCP and API links</span></button>
     </nav>
 
-    <p class="foot">Independent, non-custodial software. Not affiliated with Samsung, Anthropic, OpenAI, Solana Foundation or Pocket Network Foundation. Not financial advice; crypto assets can lose value. <button class="linkish" id="disclosures" type="button">Disclosures</button></p>
+    <p class="foot">Independent, non-custodial software. Not affiliated with Samsung, Anthropic, OpenAI, Solana Foundation or Pocket Network Foundation. Not financial advice; crypto assets can lose value. <button class="linkish" id="disclosures" type="button">Disclosures</button> · <a href="pals.html">Meet Nodus and Pip</a></p>
   </main>
 
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>

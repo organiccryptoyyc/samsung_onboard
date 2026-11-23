@@ -117,3 +117,28 @@ pre { background: var(--surface-2); border-radius: 12px; padding: 12px; overflow
 .linkish { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-size: inherit; }
 details.legal { background: var(--surface-2); border-radius: 12px; padding: 10px 14px; font-size: 13px; color: var(--muted); }
 details.legal summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+
+/* ---------- Pokt Pal: Nodus and Pip ---------- */
+:root { --gold: #f5b83d; }
+.brand img { border-radius: 9px; }
+.chip.install { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.pals { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 8px; margin: -4px -4px 14px; }
+.pals img { display: block; height: auto; }
+.pals .nodus { width: 104px; animation: bob 4s ease-in-out infinite; filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, .55)) drop-shadow(0 8px 14px rgba(0, 0, 0, .35)); }
+.pals .pip { width: 64px; align-self: start; animation: float 3s ease-in-out infinite; }
+.bubbles { display: grid; gap: 6px; align-self: center; }
+.bubble { position: relative; margin: 0 !important; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 14px; padding: 8px 10px; font-size: 13px; line-height: 1.35; opacity: 1 !important; }
+.bubble b { color: var(--gold); font-weight: 700; }
+.bubble.from-pip { background: rgba(79, 209, 173, .18); border-color: rgba(79, 209, 173, .45); }
+.bubble.from-pip b { color: #7ff0cf; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+@media (prefers-reduced-motion: reduce) { .pals img { animation: none; } }
+@media (max-width: 380px) { .pals .nodus { width: 84px; } .pals .pip { width: 52px; } }
+.tile.wide { position: relative; overflow: hidden; }
+.tile.wide::after { content: ""; position: absolute; right: -8px; bottom: -10px; width: 96px; height: 96px;
+  background: url(pals/pip.svg) no-repeat center / contain; opacity: .9; pointer-events: none; }
+.tile.wide .tile-title, .tile.wide .tile-sub { position: relative; z-index: 1; max-width: calc(100% - 84px); }
+.pip-says { display: flex; gap: 10px; align-items: flex-start; }
+.pip-says img { width: 36px; height: 36px; flex: none; }
