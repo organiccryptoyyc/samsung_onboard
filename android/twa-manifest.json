@@ -1,0 +1,80 @@
+{
+  "packageId": "app.poktpal.twa",
+  "host": "onboard.organiccryptoyyc.com",
+  "name": "Pokt Pal",
+  "launcherName": "Pokt Pal",
+  "display": "standalone",
+  "themeColor": "#1D2670",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0B0E1C",
+  "enableNotifications": false,
+  "startUrl": "/?source=twa",
+  "iconUrl": "https://onboard.organiccryptoyyc.com/icons/app-512.png",
+  "maskableIconUrl": "https://onboard.organiccryptoyyc.com/icons/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./upload-key.jks",
+    "alias": "upload"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [
+    {
+      "name": "Buy POKT",
+      "shortName": "Buy POKT",
+      "url": "https://onboard.organiccryptoyyc.com/?tile=buy",
+      "chosenIconUrl": "https://onboard.organiccryptoyyc.com/icons/app-192.png"
+    },
+    {
+      "name": "Swap",
+      "shortName": "Swap",
+      "url": "https://onboard.organiccryptoyyc.com/?tile=swap",
+      "chosenIconUrl": "https://onboard.organiccryptoyyc.com/icons/app-192.png"
+    },
+    {
+      "name": "Agent Marketplace",
+      "shortName": "Agent Market",
+      "url": "https://onboard.organiccryptoyyc.com/?tile=marketplace",
+      "chosenIconUrl": "https://onboard.organiccryptoyyc.com/icons/app-192.png"
+    },
+    {
+      "name": "Get started",
+      "shortName": "Get started",
+      "url": "https://onboard.organiccryptoyyc.com/#start",
+      "chosenIconUrl": "https://onboard.organiccryptoyyc.com/icons/app-192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://onboard.organiccryptoyyc.com/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://onboard.organiccryptoyyc.com/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [
+    {
+      "name": "upload key (kept on the developer's PC)",
+      "value": "05:40:7C:29:C3:36:E0:47:11:BC:6D:68:4A:3E:3A:D5:E3:69:A6:F5:C7:F9:6E:71:40:2B:71:A9:23:5D:44:7C"
+    }
+  ],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "appVersion": "1.0.0"
+}
