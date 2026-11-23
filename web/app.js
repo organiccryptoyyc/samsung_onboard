@@ -371,6 +371,33 @@ document.querySelectorAll('[data-tile]').forEach((b) => { b.onclick = () => show
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 
+// ---------- install as an app (Android Chrome, Samsung Internet, desktop Chrome/Edge) ----------
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e;
+  $('#install').hidden = false;
+});
+$('#install').onclick = async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice.catch(() => null);
+  installPrompt = null;
+  $('#install').hidden = true;
+};
+window.addEventListener('appinstalled', () => { $('#install').hidden = true; toast('Pokt Pal installed. Nodus is pleased.'); });
+
+// ---------- Nodus schemes, Pip explains ----------
+const BANTER = [
+  ['Phase one: your USDC.', 'He means: swap it to POKT in a few taps. Your wallet signs. We never touch your keys.'],
+  ['Ten thousand nodes. One plan.', 'The plan is: your AI pays half a cent a call and the nodes get paid. That is the whole plan.'],
+  ['Now, tell me your seed phrase—', 'Never share it. Not even with him. Pokt Pal only connects to your own wallet.'],
+  ['Tonight we relay… everything.', 'Every request goes to a decentralized network instead of one company\'s server. Less scary than it sounds.'],
+];
+const [nl, pl] = BANTER[Math.floor(Math.random() * BANTER.length)];
+$('#nodus-line').textContent = nl;
+$('#pip-line').textContent = pl;
+
 // Deep link: ?tile=buy or #start opens a screen directly (used by the cue card QR codes).
 const params = new URLSearchParams(location.search);
 if (params.get('tile')) showTile(params.get('tile'));

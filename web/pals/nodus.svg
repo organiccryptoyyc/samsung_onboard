@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" role="img" aria-label="Nodus, a hexagon-shaped Pocket node with a monocle">
+  <defs>
+    <linearGradient id="nb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b78ff"/><stop offset="1" stop-color="#1d2670"/></linearGradient>
+    <radialGradient id="ng" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd166" stop-opacity=".9"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="100" cy="208" rx="58" ry="7" fill="#000" opacity=".18"/>
+  <!-- cable tail -->
+  <path d="M64 176 C30 196 18 170 10 196" fill="none" stroke="#1d2670" stroke-width="6" stroke-linecap="round"/>
+  <rect x="2" y="194" width="16" height="12" rx="3" fill="#f5b83d"/>
+  <!-- antenna -->
+  <line x1="100" y1="54" x2="100" y2="26" stroke="#1d2670" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="100" cy="20" r="16" fill="url(#ng)"/>
+  <circle cx="100" cy="20" r="7" fill="#ffd166"/>
+  <!-- feet -->
+  <rect x="68" y="186" width="24" height="16" rx="8" fill="#1d2670"/>
+  <rect x="108" y="186" width="24" height="16" rx="8" fill="#1d2670"/>
+  <!-- left arm, hand on hip -->
+  <path d="M44 128 Q22 136 30 156" fill="none" stroke="#1d2670" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="31" cy="158" r="8" fill="#3d5cf0"/>
+  <!-- right arm, finger raised: "phase one" -->
+  <path d="M156 122 Q176 112 178 88" fill="none" stroke="#1d2670" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="178" cy="86" r="9" fill="#3d5cf0"/>
+  <rect x="175" y="64" width="7" height="20" rx="3.5" fill="#3d5cf0"/>
+  <!-- body: rounded hexagon -->
+  <polygon points="100,54 157,87 157,153 100,186 43,153 43,87" fill="url(#nb)" stroke="url(#nb)" stroke-width="14" stroke-linejoin="round"/>
+  <polygon points="100,62 150,91 150,100 100,71 50,100 50,91" fill="#fff" opacity=".12"/>
+  <!-- face screen -->
+  <rect x="58" y="88" width="84" height="58" rx="18" fill="#0b0e1c"/>
+  <!-- scheming brows -->
+  <path d="M68 98 L90 104" stroke="#e9ecf8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M110 104 L134 95" stroke="#e9ecf8" stroke-width="5" stroke-linecap="round"/>
+  <!-- left eye, narrowed -->
+  <path d="M72 115 Q81 107 90 115 Q81 120 72 115 Z" fill="#4fd1ad"/>
+  <circle cx="83" cy="114" r="3" fill="#0b0e1c"/>
+  <!-- right eye with monocle -->
+  <circle cx="121" cy="115" r="7" fill="#4fd1ad"/>
+  <circle cx="123" cy="114" r="3" fill="#0b0e1c"/>
+  <circle cx="121" cy="115" r="13" fill="#fff" fill-opacity=".08" stroke="#f5b83d" stroke-width="3.5"/>
+  <path d="M131 124 Q140 150 128 170" fill="none" stroke="#f5b83d" stroke-width="2" stroke-dasharray="3 3"/>
+  <circle cx="126" cy="109" r="2.2" fill="#fff"/>
+  <!-- smirk -->
+  <path d="M84 133 Q100 140 116 128" fill="none" stroke="#4fd1ad" stroke-width="4" stroke-linecap="round"/>
+  <!-- relay lights -->
+  <circle cx="86" cy="164" r="4.5" fill="#4fd1ad"/>
+  <circle cx="100" cy="164" r="4.5" fill="#ffd166"/>
+  <circle cx="114" cy="164" r="4.5" fill="#ff8a80"/>
+</svg>
