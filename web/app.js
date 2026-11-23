@@ -1,4 +1,4 @@
-import { state, connectSolana, connectKeplr, signSolana, signAndBroadcastPocket } from './wallets.js';
+import { state, isPhone, keplrMobileAvailable, connectSolana, connectKeplr, signSolana, signAndBroadcastPocket } from './wallets.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const QR_URL = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
@@ -108,8 +108,14 @@ async function onConnectSol() {
 }
 
 async function onConnectKeplr() {
+  if (keplrMobileAvailable() && !state.pokt) toast('Opening Keplr. Approve, then come back here.');
   try {
     const r = await connectKeplr();
+    if (!r.ok && isPhone) {
+      return openSheet('Keplr on your phone', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>Connecting the Keplr phone app isn't switched on yet on this site.</p></div>
+        <p>Keplr is only needed to <strong>stake</strong> native POKT. For now, stake from a computer with the Keplr browser extension.</p>
+        <p class="muted">Buy, sell and swap work on this phone with Phantom or Solflare.</p>`);
+    }
     if (!r.ok) return toast(r.message);
     $('#connect-keplr').textContent = `POKT ${short(r.address)}`;
     $('#connect-keplr').classList.add('on');
@@ -369,21 +375,45 @@ $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') clos
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet(); });
 document.querySelectorAll('[data-tile]').forEach((b) => { b.onclick = () => showTile(b.dataset.tile); });
 
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  // When a new release's worker takes over a page an older worker served, reload once to show it.
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController && !reloaded) { reloaded = true; location.reload(); }
+  });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
+}
 
 // ---------- install as an app (Android Chrome, Samsung Internet, desktop Chrome/Edge) ----------
 let installPrompt = null;
+const ua = navigator.userAgent;
+const isInstalled = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+// Phones always get the button: many mobile browsers never fire beforeinstallprompt,
+// so the button falls back to step-by-step instructions for the browser in use.
+if (isPhone && !isInstalled()) $('#install').hidden = false;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   installPrompt = e;
   $('#install').hidden = false;
 });
+function installSteps() {
+  if (/iPhone|iPad|iPod/i.test(ua)) return ['Open this page in Safari.', 'Tap the Share button (the square with an arrow).', 'Tap "Add to Home Screen", then "Add".'];
+  if (/SamsungBrowser/i.test(ua)) return ['Tap the install icon in the address bar if you see one.', 'Otherwise tap the ☰ menu at the bottom right.', 'Tap "Add page to", then "Home screen".'];
+  if (/Firefox/i.test(ua)) return ['Tap the ⋮ menu.', 'Tap "Install" or "Add to Home screen".'];
+  return ['Tap the ⋮ menu at the top right.', 'Tap "Install app" (or "Add to Home screen").', 'Tap "Install".'];
+}
 $('#install').onclick = async () => {
-  if (!installPrompt) return;
-  installPrompt.prompt();
-  await installPrompt.userChoice.catch(() => null);
-  installPrompt = null;
-  $('#install').hidden = true;
+  if (installPrompt) {
+    installPrompt.prompt();
+    await installPrompt.userChoice.catch(() => null);
+    installPrompt = null;
+    if (isInstalled()) $('#install').hidden = true;
+    return;
+  }
+  openSheet('Install Pokt Pal', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>Pokt Pal installs from your browser, no app store needed. It gets its own icon and opens full screen.</p></div>
+    <ol class="steps">${installSteps().map((t) => `<li><p>${esc(t)}</p></li>`).join('')}</ol>
+    <p class="muted">Don't see the option? Reload the page once and try again.</p>`);
 };
 window.addEventListener('appinstalled', () => { $('#install').hidden = true; toast('Pokt Pal installed. Nodus is pleased.'); });
 

@@ -5,7 +5,9 @@ const STARGATE_URL = 'https://cdn.jsdelivr.net/npm/@cosmjs/stargate@0.32.4/+esm'
 
 const cfg = () => window.POKT_ONBOARD;
 
-export const state = { solana: null, pokt: null, solProvider: null };
+export const state = { solana: null, pokt: null, solProvider: null, keplr: null };
+export const isPhone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isAndroid = /Android/i.test(navigator.userAgent);
 
 function solanaProvider() {
   if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
@@ -33,10 +35,48 @@ export async function connectSolana() {
   return { ok: true, address: state.solana };
 }
 
+// Keplr Mobile over WalletConnect. The link opens the Keplr app to approve.
+function keplrAppLink(uri) {
+  const q = uri ? `?${encodeURIComponent(uri)}` : '';
+  return isAndroid ? `intent://wcV2${q}#Intent;package=com.chainapsis.keplr;scheme=keplrwallet;end;` : `keplrwallet://wcV2${q}`;
+}
+const KEPLR_WC_NAMESPACE = (chainId) => ({
+  cosmos: {
+    chains: [`cosmos:${chainId}`],
+    methods: ['keplr_getKey', 'keplr_signAmino', 'keplr_signDirect', 'keplr_signArbitrary', 'keplr_enable', 'keplr_experimentalSuggestChain'],
+    events: ['keplr_accountsChanged'],
+  },
+});
+
+let wcKeplr = null;
+async function keplrMobile() {
+  if (wcKeplr) return wcKeplr;
+  const { SignClient, KeplrWalletConnectV2 } = await import('./vendor/keplr-wc.js');
+  const signClient = await SignClient.init({
+    projectId: cfg().walletConnectProjectId,
+    metadata: { name: 'Pokt Pal', description: 'Buy, swap and stake POKT. Non-custodial.', url: location.origin, icons: [new URL('icons/app-192.png', location.href).href] },
+  });
+  let session = signClient.session.getAll().filter((x) => x.namespaces?.cosmos).at(-1);
+  if (!session) {
+    const { uri, approval } = await signClient.connect({ requiredNamespaces: KEPLR_WC_NAMESPACE(cfg().pocketChainId) });
+    if (uri) window.location.href = keplrAppLink(uri);
+    session = await approval();
+  }
+  // Keplr's adapter reopens the app with this link for every approval request.
+  try { localStorage.setItem('wallet-connect-v2-mobile-link', JSON.stringify({ href: keplrAppLink() })); } catch { /* optional */ }
+  wcKeplr = new KeplrWalletConnectV2(signClient, { sessionProperties: session.sessionProperties });
+  return wcKeplr;
+}
+
+export const keplrMobileAvailable = () => isPhone && !window.keplr && !!cfg().walletConnectProjectId;
+
 export async function connectKeplr() {
-  if (!window.keplr) return { ok: false, message: 'Keplr not found. Install the Keplr extension, or open this page in the Keplr mobile app browser.' };
-  await window.keplr.enable(cfg().pocketChainId);
-  const key = await window.keplr.getKey(cfg().pocketChainId);
+  let k = window.keplr;
+  if (!k && keplrMobileAvailable()) k = await keplrMobile();
+  if (!k) return { ok: false, message: 'Keplr not found. Install the Keplr browser extension on a computer.' };
+  await k.enable(cfg().pocketChainId);
+  const key = await k.getKey(cfg().pocketChainId);
+  state.keplr = k;
   state.pokt = key.bech32Address;
   return { ok: true, address: state.pokt };
 }
@@ -57,7 +97,7 @@ export async function signSolana(unsignedB64) {
 export async function signAndBroadcastPocket(built) {
   if (!state.pokt) throw new Error('Connect Keplr first.');
   const { SigningStargateClient } = await import(STARGATE_URL);
-  const signer = window.keplr.getOfflineSigner(cfg().pocketChainId);
+  const signer = state.keplr.getOfflineSigner(cfg().pocketChainId);
   const client = await SigningStargateClient.connectWithSigner(cfg().pocketRpc, signer);
   const res = await client.signAndBroadcast(state.pokt, built.messages, built.fee, built.memo || '');
   if (res.code !== 0) throw new Error(res.rawLog || `Transaction failed with code ${res.code}`);

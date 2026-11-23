@@ -1,9 +1,8 @@
 // Pokt Pal service worker.
-// App shell: served from cache instantly, refreshed in the background, so the
-// app opens offline and picks up new releases on the next launch.
+// App files come from the network when online and from the cache when offline.
 // API calls (/api/) and other origins are never cached: prices, balances and
 // transactions must always come from the network.
-const CACHE = 'pokt-pal-v2';
+const CACHE = 'pokt-pal-v3';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'wallets.js', 'config.js', 'manifest.webmanifest',
   'icons/app.svg', 'icons/app-192.png', 'pals/nodus.svg', 'pals/pip.svg', 'pals.html'];
 
@@ -19,19 +18,11 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== location.origin || url.pathname.includes('/api/')) return;
-  if (req.mode === 'navigate') {
-    // Pages: network first so a deploy shows up immediately; cached shell when offline.
-    e.respondWith(fetch(req).then((res) => {
-      const copy = res.clone();
-      caches.open(CACHE).then((c) => c.put(req, copy));
-      return res;
-    }).catch(() => caches.match(req).then((hit) => hit || caches.match('index.html'))));
-    return;
-  }
-  // Static files: stale-while-revalidate.
-  e.respondWith(caches.open(CACHE).then(async (c) => {
-    const hit = await c.match(req);
-    const net = fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; }).catch(() => hit);
-    return hit || net;
-  }));
+  // Network first for every app file, revalidated against the server (cheap
+  // 304s), so a deploy shows up whole on the next load and pages never mix
+  // new HTML with old scripts. The cache is only the offline fallback.
+  e.respondWith(fetch(req, { cache: 'no-cache' }).then((res) => {
+    if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
+    return res;
+  }).catch(() => caches.match(req).then((hit) => hit || (req.mode === 'navigate' ? caches.match('index.html') : Response.error()))));
 });
