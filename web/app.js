@@ -1,4 +1,4 @@
-import { state, connectSolana, connectKeplr, signSolana, signAndBroadcastPocket } from './wallets.js';
+import { state, isPhone, keplrMobileAvailable, connectSolana, connectKeplr, signSolana, signAndBroadcastPocket } from './wallets.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const QR_URL = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
@@ -108,10 +108,11 @@ async function onConnectSol() {
 }
 
 async function onConnectKeplr() {
+  if (keplrMobileAvailable() && !state.pokt) toast('Opening Keplr. Approve, then come back here.');
   try {
     const r = await connectKeplr();
-    if (!r.ok && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      return openSheet('Keplr on your phone', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>The Keplr phone app can't connect to websites yet. We're adding a "connect with Keplr Mobile" option soon.</p></div>
+    if (!r.ok && isPhone) {
+      return openSheet('Keplr on your phone', `<div class="pip-says"><img src="pals/pip.svg" alt=""><p>Connecting the Keplr phone app isn't switched on yet on this site.</p></div>
         <p>Keplr is only needed to <strong>stake</strong> native POKT. For now, stake from a computer with the Keplr browser extension.</p>
         <p class="muted">Buy, sell and swap work on this phone with Phantom or Solflare.</p>`);
     }
@@ -387,7 +388,6 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 // ---------- install as an app (Android Chrome, Samsung Internet, desktop Chrome/Edge) ----------
 let installPrompt = null;
 const ua = navigator.userAgent;
-const isPhone = /Android|iPhone|iPad|iPod/i.test(ua);
 const isInstalled = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 // Phones always get the button: many mobile browsers never fire beforeinstallprompt,
 // so the button falls back to step-by-step instructions for the browser in use.
