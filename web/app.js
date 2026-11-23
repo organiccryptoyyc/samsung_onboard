@@ -369,7 +369,15 @@ $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') clos
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet(); });
 document.querySelectorAll('[data-tile]').forEach((b) => { b.onclick = () => showTile(b.dataset.tile); });
 
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  // When a new release's worker takes over a page an older worker served, reload once to show it.
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController && !reloaded) { reloaded = true; location.reload(); }
+  });
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
+}
 
 // ---------- install as an app (Android Chrome, Samsung Internet, desktop Chrome/Edge) ----------
 let installPrompt = null;
