@@ -10,5 +10,5 @@ window.POKT_ONBOARD = {
   pocketChainId: 'pocket',
   // Free project ID from https://cloud.reown.com (WalletConnect). Lets phones
   // connect the Keplr Mobile app. Public value; leave empty to turn it off.
-  walletConnectProjectId: '',
+  walletConnectProjectId: '4449c4c1c614db7ac50b1fc918e23956',
 };
