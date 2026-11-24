@@ -2,7 +2,7 @@
 // App files come from the network when online and from the cache when offline.
 // API calls (/api/) and other origins are never cached: prices, balances and
 // transactions must always come from the network.
-const CACHE = 'pokt-pal-v3';
+const CACHE = 'pokt-pal-v4';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'wallets.js', 'config.js', 'manifest.webmanifest',
   'icons/app.svg', 'icons/app-192.png', 'pals/nodus.svg', 'pals/pip.svg', 'pals.html'];
 

@@ -13,29 +13,41 @@ out of scope for now so that swapping can stay live in the app.
   header (`beforeinstallprompt`). Installed, it opens full screen with its own
   icon, like a native app.
 
-## Step 2: Trusted Web Activity (Play Store and Galaxy Store)
+## Step 2: Trusted Web Activity on Google Play (beta, current domain)
 
 A TWA wraps the same PWA in a thin Android app, so there is one codebase and
-every web deploy updates the app without a store review.
+every web deploy updates the app without a store review. The beta keeps
+`onboard.organiccryptoyyc.com`; moving domains later means a new app version
+with a new `host` (same package id), plus asset links on the new domain.
 
-1. Move to the final domain first (see below). The app's identity is tied to
-   the domain through Digital Asset Links, so changing it later means a new
-   store listing.
-2. `npx @bubblewrap/cli init --manifest https://<domain>/manifest.webmanifest`
-   then `bubblewrap build`. Suggested package id: `app.poktpal.twa`.
-3. Publish `/.well-known/assetlinks.json` on the domain with the signing key's
-   SHA-256 fingerprint (Play App Signing shows it), so Chrome hides the URL bar.
-4. Upload the `.aab` to Google Play (internal testing track first), and the
-   same build to the Samsung Galaxy Store, which suits Samsung Wallet users.
-5. Direct APK download is possible for the community trial (`bubblewrap build`
-   also outputs an `.apk`), but users must allow unknown sources.
+- `android/` is the Bubblewrap project (package `app.poktpal.twa`).
+  `android/twa-manifest.json` is the source of truth; bump `appVersionCode`
+  (and `appVersionName`) for every Play upload, and mirror them in
+  `android/app/build.gradle`.
+- `.github/workflows/android.yml` builds an **unsigned** release bundle on any
+  push touching `android/` and attaches it to a GitHub pre-release named
+  `android-<version>-<sha>`.
+- The **upload key** lives only on the developer's PC, in a git-ignored
+  folder `pocket-agentic-services/pokt-pal-android-signing/` (keystore
+  `upload-key.jks`, alias `upload`, password in the text file beside it).
+  Sign the bundle there:
+  `jarsigner -sigalg SHA256withRSA -digestalg SHA-256 -keystore upload-key.jks -storepass <pw> pokt-pal-unsigned.aab upload`
+  If the key is lost, Play support can reset an upload key (Play App Signing
+  holds the real app signing key).
+- `web/.well-known/assetlinks.json` lists the SHA-256 fingerprints Chrome
+  trusts to hide the URL bar: the upload key, and after the first Play upload
+  also the **app signing key** from Play Console > Test and release > App
+  integrity. Without the Play one, Play-installed copies show a URL bar.
+- Store listing text and graphics: `docs/play-store/`.
+- Privacy policy: `web/privacy.html`.
 
-Store policy notes to check before submitting (rules change, re-read them):
-Google Play's cryptocurrency policy allows non-custodial wallet-connect apps in
-most regions; exchange or custodial features need licences in some countries.
-Pokt Pal holds no keys and executes swaps the user signs in their own wallet,
-which is the non-custodial case. Wallet deep links (Phantom, Solflare) work
-inside a TWA because they open the wallet app by intent.
+Store policy notes (rules change, re-read them before submitting): Google
+Play's cryptocurrency policy allows non-custodial apps in most regions;
+exchange or custodial features need licences in some countries. Pokt Pal holds
+no keys and executes swaps the user signs in their own wallet. New personal
+developer accounts must run a closed test with enough opted-in testers for 14
+days before they can apply for production; internal testing has no such wait.
+The Samsung Galaxy Store can take the same signed bundle later.
 
 ## Domain
 
