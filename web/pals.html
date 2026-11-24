@@ -6,8 +6,8 @@
   <title>Meet Nodus and Pip</title>
   <meta name="description" content="The Pokt Pal mascots: Nodus, a Pocket node with a plan, and Pip, the AI spark who explains it.">
   <meta name="theme-color" content="#1d2670">
-  <link rel="icon" href="../../web/icons/app.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../web/styles.css">
+  <link rel="icon" href="icons/app.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
   <style>
     .sheet-page { max-width: 880px; margin: 0 auto; padding: 0 16px 48px; }
     .sheet-page h2 { font-size: 22px; margin: 36px 0 12px; }
@@ -29,9 +29,6 @@
     .char ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink); }
     .char li { margin: 4px 0; }
     .quote { margin-top: 10px; background: var(--surface-2); border-radius: 12px; padding: 10px 12px; font-style: italic; }
-    .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
-    .sw { display: grid; gap: 4px; font-size: 12px; color: var(--muted); }
-    .sw i { display: block; width: 72px; height: 44px; border-radius: 10px; border: 1px solid var(--line); }
     .tags { display: grid; gap: 10px; grid-template-columns: 1fr; }
     @media (min-width: 620px) { .tags { grid-template-columns: 1fr 1fr; } }
     .tag { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--gold); border-radius: 12px; padding: 12px 14px; font-weight: 700; }
@@ -57,49 +54,42 @@
     .panel .tiny { width: 22% !important; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (prefers-reduced-motion: reduce) { .panel .spin { animation: none; } }
-    .rules { display: grid; gap: 12px; grid-template-columns: 1fr; }
-    @media (min-width: 620px) { .rules { grid-template-columns: 1fr 1fr; } }
-    .rules div { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
-    .rules h3 { margin: 0 0 6px; font-size: 16px; }
-    .rules ul { margin: 0; padding-left: 18px; }
     .back { display: inline-block; margin: 8px 0 12px; }
   </style>
 </head>
 <body>
   <header class="top">
-    <a class="brand" href="../../web/" style="color:inherit;text-decoration:none"><img src="../../web/icons/app.svg" alt="" width="32" height="32"><span>Pokt Pal</span></a>
+    <a class="brand" href="./" style="color:inherit;text-decoration:none"><img src="icons/app.svg" alt="" width="32" height="32"><span>Pokt Pal</span></a>
   </header>
   <main class="sheet-page">
     <section class="duo">
       <div>
-        <p class="eyebrow">Mascot concept sheet</p>
+        <p class="eyebrow">Meet the pals</p>
         <h1>Nodus has a plan.<br>Pip explains it.</h1>
         <p>A Pocket node who thinks he's a criminal mastermind, and the cheerful AI spark who keeps translating his "evil schemes" into what they really are: you, your own wallet, and half a cent per call.</p>
       </div>
-      <div class="duo-art"><img class="n" src="../../web/pals/nodus.svg" alt="Nodus"><img class="p" src="../../web/pals/pip.svg" alt="Pip"></div>
+      <div class="duo-art"><img class="n" src="pals/nodus.svg" alt="Nodus"><img class="p" src="pals/pip.svg" alt="Pip"></div>
     </section>
 
     <h2>The characters</h2>
     <div class="cards">
       <article class="char">
-        <header><img src="../../web/pals/nodus.svg" alt=""><div><h3>Nodus</h3><div class="role">The node with a plan · Pocket relay node</div></div></header>
+        <header><img src="pals/nodus.svg" alt=""><div><h3>Nodus</h3><div class="role">The node with a plan · Pocket relay node</div></div></header>
         <p>A hexagonal relay node with a gold monocle, one suspicious eyebrow and a 10,000-step plan. Grand, theatrical and talks in "phases". Every scheme turns out to be wholesome: decentralize everything and make sure the little nodes get paid.</p>
         <ul>
           <li><b>Look:</b> blue hex chassis, dark face screen, monocle on a chain, antenna bulb that lights up when he has an idea, three relay lights on his chest, a power cable for a tail.</li>
           <li><b>Voice:</b> dramatic, formal, never finishes a villain laugh.</li>
           <li><b>Weakness:</b> gets distracted optimizing latency mid-monologue.</li>
-          <li><b>Job in the app:</b> the hook. One-line teaser on each screen.</li>
         </ul>
         <p class="quote">"Phase one: your USDC. Phase two… also your USDC, but as POKT."</p>
       </article>
       <article class="char">
-        <header><img src="../../web/pals/pip.svg" alt=""><div><h3>Pip</h3><div class="role">The pal · AI sidekick</div></div></header>
+        <header><img src="pals/pip.svg" alt=""><div><h3>Pip</h3><div class="role">The pal · AI sidekick</div></div></header>
         <p>A little spark that hatched from the relay stream, with an orbit ring and a star sprout on top. Curious, literal and very fast at maths. Pip asks the question everyone is thinking and answers it in plain words. Pip is the "Pal" in Pokt Pal.</p>
         <ul>
           <li><b>Look:</b> round mint glow, big eyes, gold orbit ring with one moon, star sprout. Floats; never walks.</li>
           <li><b>Voice:</b> friendly, short sentences, no jargon. Says "Computing… yes!"</li>
           <li><b>Weakness:</b> reads every terms page out loud. Every one.</li>
-          <li><b>Job in the app:</b> the guide. Safety tips, fees, next steps.</li>
         </ul>
         <p class="quote">"He means: swap it in a few taps. Your wallet signs. We never touch your keys."</p>
       </article>
@@ -109,53 +99,29 @@
     <div class="strip">
       <div class="panel"><span class="num">1</span>
         <div class="talk"><p class="b"><em>Nodus:</em> Pip. Phase one. A human with USDC in their Samsung Wallet.</p><p class="b pipb"><em>Pip:</em> That's Sam! Sam has twenty-five dollars.</p></div>
-        <div class="stage"><img class="n" src="../../web/pals/nodus.svg" alt=""><img class="p" src="../../web/pals/pip.svg" alt=""></div></div>
+        <div class="stage"><img class="n" src="pals/nodus.svg" alt=""><img class="p" src="pals/pip.svg" alt=""></div></div>
       <div class="panel"><span class="num">2</span>
         <div class="talk"><p class="b"><em>Nodus:</em> Phase two. Sam swaps to POKT… and Sam signs. <i>Personally.</i></p><p class="b pipb"><em>Pip:</em> We don't even have the keys! Very legal. Very cool.</p></div>
-        <div class="stage"><img class="n" src="../../web/pals/nodus.svg" alt=""><img class="p flip" src="../../web/pals/pip.svg" alt=""></div></div>
+        <div class="stage"><img class="n" src="pals/nodus.svg" alt=""><img class="p flip" src="pals/pip.svg" alt=""></div></div>
       <div class="panel"><span class="num">3</span>
         <div class="talk"><p class="b"><em>Nodus:</em> Phase three. Sam's AI agent calls ten thousand nodes!</p><p class="b pipb"><em>Pip:</em> Computing… at half a cent a call, that's fifty dollars. Yes!</p></div>
-        <div class="stage"><img class="n" src="../../web/pals/nodus.svg" alt=""><img class="p spin" src="../../web/pals/pip.svg" alt=""></div></div>
+        <div class="stage"><img class="n" src="pals/nodus.svg" alt=""><img class="p spin" src="pals/pip.svg" alt=""></div></div>
       <div class="panel"><span class="num">4</span>
         <div class="talk"><p class="b"><em>Nodus:</em> And every node gets paid. The network is ours, Pip! Mwah-ha—</p><p class="b pipb"><em>Pip:</em> Relay complete! Sam says thanks!</p><p class="b"><em>Nodus:</em> …ha.</p></div>
-        <div class="stage"><img class="n glint" src="../../web/pals/nodus.svg" alt=""><img class="p tiny" src="../../web/pals/pip.svg" alt=""></div></div>
+        <div class="stage"><img class="n glint" src="pals/nodus.svg" alt=""><img class="p tiny" src="pals/pip.svg" alt=""></div></div>
     </div>
 
-    <h2>Taglines</h2>
+    <h2>Things they say</h2>
     <div class="tags">
-      <p class="tag">One node with a plan. One AI with questions.<span>Main line for the store listing</span></p>
-      <p class="tag">Your keys. Our scheme.<span>Non-custodial, said with a monocle</span></p>
-      <p class="tag">Half a cent per genius idea.<span>Agent Marketplace</span></p>
-      <p class="tag">Mwah-ha-relay.<span>Loading screen, stickers</span></p>
-      <p class="tag">Nodus schemes. Pip explains. You sign.<span>How the app works, in six words</span></p>
-      <p class="tag">We'll never ask for your seed phrase. Nodus tried once. Pip said no.<span>Safety tip</span></p>
+      <p class="tag">One node with a plan. One AI with questions.</p>
+      <p class="tag">Your keys. Our scheme.</p>
+      <p class="tag">Half a cent per genius idea.</p>
+      <p class="tag">Mwah-ha-relay.</p>
+      <p class="tag">Nodus schemes. Pip explains. You sign.</p>
+      <p class="tag">We'll never ask for your seed phrase. Nodus tried once. Pip said no.</p>
     </div>
 
-    <h2>Palette</h2>
-    <div class="swatches">
-      <div class="sw"><i style="background:#3d5cf0"></i>Relay blue #3d5cf0</div>
-      <div class="sw"><i style="background:#1d2670"></i>Night chassis #1d2670</div>
-      <div class="sw"><i style="background:#0b0e1c"></i>Screen #0b0e1c</div>
-      <div class="sw"><i style="background:#4fd1ad"></i>Pip mint #4fd1ad</div>
-      <div class="sw"><i style="background:#f5b83d"></i>Monocle gold #f5b83d</div>
-      <div class="sw"><i style="background:#ff8a80"></i>Blush #ff8a80</div>
-    </div>
-
-    <h2>Rules of the duo</h2>
-    <div class="rules">
-      <div><h3>Do</h3><ul>
-        <li>Nodus teases; Pip gives the real, accurate answer right after.</li>
-        <li>Use Pip for safety: seed phrases, irreversible bridges, fees.</li>
-        <li>Keep Nodus's schemes wholesome: pay the nodes, decentralize, help the user.</li>
-      </ul></div>
-      <div><h3>Don't</h3><ul>
-        <li>Put a joke where the user needs a number. Amounts and warnings stay plain.</li>
-        <li>Have either character ask for keys, phrases or deposits to them.</li>
-        <li>Draw them near other companies' logos or characters, or imply Pocket Network Foundation endorsement.</li>
-      </ul></div>
-    </div>
-
-    <p class="muted" style="margin-top:28px">Original characters drawn for Pokt Pal. Pokt Pal is independent, non-custodial software and is not affiliated with the Pocket Network Foundation. <a class="back" href="../../web/">Back to the app</a></p>
+    <p class="muted" style="margin-top:28px">Pokt Pal is independent, non-custodial software and is not affiliated with the Pocket Network Foundation. <a class="back" href="./">Back to the app</a></p>
   </main>
 </body>
 </html>

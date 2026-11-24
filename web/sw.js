@@ -4,7 +4,7 @@
 // transactions must always come from the network.
 const CACHE = 'pokt-pal-v5';
 const SHELL = ['./', 'index.html', 'styles.css', 'app.js', 'wallets.js', 'config.js', 'manifest.webmanifest',
-  'icons/app.svg', 'icons/app-192.png', 'pals/nodus.svg', 'pals/pip.svg'];
+  'icons/app.svg', 'icons/app-192.png', 'pals/nodus.svg', 'pals/pip.svg', 'pals.html'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
