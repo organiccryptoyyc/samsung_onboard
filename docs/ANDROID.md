@@ -20,7 +20,7 @@ every web deploy updates the app without a store review. The beta keeps
 `onboard.organiccryptoyyc.com`; moving domains later means a new app version
 with a new `host` (same package id), plus asset links on the new domain.
 
-- `android/` is the Bubblewrap project (package `app.poktpal.twa`).
+- `android/` is the Bubblewrap project (package `app.poktpal.yyc`).
   `android/twa-manifest.json` is the source of truth; bump `appVersionCode`
   (and `appVersionName`) for every Play upload, and mirror them in
   `android/app/build.gradle`.

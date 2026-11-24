@@ -21,7 +21,7 @@ plugins {
 }
 
 def twaManifest = [
-    applicationId: 'app.poktpal.twa',
+    applicationId: 'app.poktpal.yyc',
     hostName: 'onboard.organiccryptoyyc.com', // The domain being opened in the TWA.
     launchUrl: '/?source=twa', // The start path for the TWA. Must be relative to the domain.
     name: 'Pokt Pal', // The application name.
@@ -52,9 +52,9 @@ def twaManifest = [
 
 android {
     compileSdkVersion 36
-    namespace "app.poktpal.twa"
+    namespace "app.poktpal.yyc"
     defaultConfig {
-        applicationId "app.poktpal.twa"
+        applicationId "app.poktpal.yyc"
         minSdkVersion 24
         targetSdkVersion 36
         versionCode 1
