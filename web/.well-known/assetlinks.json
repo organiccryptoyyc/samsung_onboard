@@ -1,10 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
-      "package_name": "app.poktpal.twa",
+      "package_name": "app.poktpal.yyc",
       "sha256_cert_fingerprints": [
+        "BC:0D:51:D6:E8:1B:F1:3E:CF:06:F4:59:EE:0D:D7:1E:5C:72:9D:FC:6A:6A:AC:62:5C:7A:0D:0F:9C:69:0E:3D",
         "05:40:7C:29:C3:36:E0:47:11:BC:6D:68:4A:3E:3A:D5:E3:69:A6:F5:C7:F9:6E:71:40:2B:71:A9:23:5D:44:7C"
       ]
     }
